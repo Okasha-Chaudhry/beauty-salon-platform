@@ -1,6 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
-require("dotenv").config();
+if (process.env.NODE_ENV !== 'production') {
+  require("dotenv").config();
+}
 
 const salonRoutes = require("./routes/salonRoutes");
 const userRoutes = require("./routes/userRoutes");
