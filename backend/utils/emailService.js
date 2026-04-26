@@ -1,25 +1,28 @@
-const Brevo = require("@getbrevo/brevo");
-
-const client = Brevo.ApiClient.instance;
-client.authentications["api-key"].apiKey = process.env.BREVO_API_KEY;
-
-const apiInstance = new Brevo.TransactionalEmailsApi();
+const axios = require("axios");
 
 const sendEmail = async (toEmail, toName, subject, htmlContent) => {
   try {
-    const email = new Brevo.SendSmtpEmail();
-    email.sender = { name: "GlamourFind 💄", email: "glamourfind810@gmail.com" };
-    email.to = [{ email: toEmail, name: toName }];
-    email.subject = subject;
-    email.htmlContent = htmlContent;
-    await apiInstance.sendTransacEmail(email);
+    await axios.post(
+      "https://api.brevo.com/v3/smtp/email",
+      {
+        sender: { name: "GlamourFind 💄", email: "glamourfind810@gmail.com" },
+        to: [{ email: toEmail, name: toName }],
+        subject: subject,
+        htmlContent: htmlContent,
+      },
+      {
+        headers: {
+          "api-key": process.env.BREVO_API_KEY,
+          "Content-Type": "application/json",
+        },
+      }
+    );
     console.log(`✅ Email sent to ${toEmail}`);
   } catch (err) {
-    console.error("❌ Email error:", err.message);
+    console.error("❌ Email error:", err.response?.data || err.message);
   }
 };
 
-// 1. Booking confirmation to customer
 const sendBookingConfirmationToCustomer = async (customerEmail, customerName, bookingDetails) => {
   await sendEmail(
     customerEmail,
@@ -71,7 +74,6 @@ const sendBookingConfirmationToCustomer = async (customerEmail, customerName, bo
   );
 };
 
-// 2. New booking notification to salon owner
 const sendNewBookingNotificationToOwner = async (ownerEmail, ownerName, bookingDetails) => {
   await sendEmail(
     ownerEmail,
@@ -122,7 +124,6 @@ const sendNewBookingNotificationToOwner = async (ownerEmail, ownerName, bookingD
   );
 };
 
-// 3. Booking status update to customer
 const sendBookingStatusUpdateToCustomer = async (customerEmail, customerName, bookingDetails, newStatus) => {
   const isConfirmed = newStatus === "confirmed";
   await sendEmail(
