@@ -1,11 +1,24 @@
 const express = require("express");
 const router = express.Router();
 const Booking = require("../models/Booking");
+const { protect, salonOwnerOnly } = require("../middleware/auth"); // 👈 ADD THIS
 
-// GET all bookings
+// GET all bookings (admin use)
 router.get("/", async (req, res) => {
   try {
     const bookings = await Booking.find()
+      .populate("customer", "name email")
+      .populate("salon", "name location");
+    res.json(bookings);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// GET bookings for a specific salon (salon owner) 👈 NEW
+router.get("/salon/:salonId", protect, salonOwnerOnly, async (req, res) => {
+  try {
+    const bookings = await Booking.find({ salon: req.params.salonId })
       .populate("customer", "name email")
       .populate("salon", "name location");
     res.json(bookings);

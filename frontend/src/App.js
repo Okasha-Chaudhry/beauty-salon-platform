@@ -6,6 +6,7 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import MyBookings from './pages/MyBookings';
 import AdminDashboard from './pages/AdminDashboard';
+import SalonOwnerDashboard from './pages/SalonOwnerDashboard';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
@@ -20,6 +21,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/my-bookings" element={<MyBookings />} />
         <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/owner-dashboard" element={<SalonOwnerDashboard />} />
       </Routes>
       <Footer />
     </BrowserRouter>

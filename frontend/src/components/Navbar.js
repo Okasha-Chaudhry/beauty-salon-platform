@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user'));
-  const [menuOpen, setMenuOpen] = useState(false);
-
+ 
   const handleLogout = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
@@ -64,6 +63,20 @@ const Navbar = () => {
             >
               My Bookings
             </span>
+
+            {/* 👇 ADD THIS — Salon Owner Portal link */}
+            {user.role === 'salon_owner' && (
+              <span
+                onClick={() => navigate('/owner-dashboard')}
+                style={{
+                  color: 'white', cursor: 'pointer',
+                  fontWeight: '500', fontSize: '15px', opacity: 0.9
+                }}
+              >
+                💄 My Salon
+              </span>
+            )}
+
             {user.role === 'admin' && (
               <span
                 onClick={() => navigate('/admin')}
