@@ -1,3 +1,4 @@
+import ImageUpload from '../components/ImageUpload';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API from '../services/api';
@@ -12,7 +13,7 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [newSalon, setNewSalon] = useState({
     name: '', description: '', location: '',
-    priceRange: '', contactInfo: '', workingHours: '', services: ''
+    priceRange: '', contactInfo: '', workingHours: '', services: '', image: ''
   });
   const [salonMsg, setSalonMsg] = useState('');
 

@@ -55,6 +55,19 @@ const Navbar = () => {
         >
           Home
         </span>
+
+        <span
+          onClick={() => navigate('/contact')}
+          style={{color: 'white', cursor: 'pointer', fontWeight: '500', fontSize: '15px', opacity: 0.9}}
+        >
+          Contact
+        </span>
+        <span
+          onClick={() => navigate('/about')}
+          style={{color: 'white', cursor: 'pointer', fontWeight: '500', fontSize: '15px', opacity: 0.9}}
+>         About
+        </span>
+
         {user ? (
           <>
             <span
@@ -64,14 +77,10 @@ const Navbar = () => {
               My Bookings
             </span>
 
-            {/* 👇 ADD THIS — Salon Owner Portal link */}
             {user.role === 'salon_owner' && (
               <span
                 onClick={() => navigate('/owner-dashboard')}
-                style={{
-                  color: 'white', cursor: 'pointer',
-                  fontWeight: '500', fontSize: '15px', opacity: 0.9
-                }}
+                style={{color: 'white', cursor: 'pointer', fontWeight: '500', fontSize: '15px', opacity: 0.9}}
               >
                 💄 My Salon
               </span>
@@ -85,6 +94,7 @@ const Navbar = () => {
                 🛠️ Admin
               </span>
             )}
+
             <div style={{display: 'flex', alignItems: 'center', gap: '12px'}}>
               <div style={{
                 width: '38px', height: '38px',

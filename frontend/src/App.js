@@ -9,7 +9,8 @@ import AdminDashboard from './pages/AdminDashboard';
 import SalonOwnerDashboard from './pages/SalonOwnerDashboard';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-
+import ContactUs from './pages/ContactUs';
+import AboutUs from './pages/AboutUs';
 function App() {
   return (
     <BrowserRouter>
@@ -22,6 +23,9 @@ function App() {
         <Route path="/my-bookings" element={<MyBookings />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/owner-dashboard" element={<SalonOwnerDashboard />} />
+        <Route path="/contact" element={<ContactUs />} />
+        <Route path="/about" element={<AboutUs />} />
+      
       </Routes>
       <Footer />
     </BrowserRouter>

@@ -38,18 +38,25 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h4 style={{fontFamily: "'Playfair Display', serif", fontSize: '18px', marginBottom: '16px', color: '#f9a8d4'}}>
-              Quick Links
-            </h4>
-            {['Home', 'Find Salons', 'My Bookings', 'Register'].map((link, i) => (
-              <p key={i} style={{color: 'rgba(255,255,255,0.6)', fontSize: '14px', marginBottom: '10px', cursor: 'pointer'}}
-                onClick={() => navigate(i === 0 ? '/' : i === 2 ? '/my-bookings' : `/${link.toLowerCase().replace(' ', '-')}`)}>
-                → {link}
-              </p>
-            ))}
-          </div>
+   {/* Quick Links */}
+<div>
+  <h4 style={{fontFamily: "'Playfair Display', serif", fontSize: '18px', marginBottom: '16px', color: '#f9a8d4'}}>
+    Quick Links
+  </h4>
+  {['Home', 'Find Salons', 'My Bookings', 'Contact Us', 'About Us'].map((link, i) => (
+    <p key={i}
+      style={{color: 'rgba(255,255,255,0.6)', fontSize: '14px', marginBottom: '10px', cursor: 'pointer'}}
+      onClick={() => navigate(
+        i === 0 ? '/' :
+        i === 1 ? '/' :
+        i === 2 ? '/my-bookings' :
+        i === 3 ? '/contact' :
+        '/about'
+          )}>
+         → {link}
+        </p>
+       ))}
+     </div>
 
           {/* Services */}
           <div>
@@ -77,6 +84,19 @@ const Footer = () => {
                 <p style={{color: 'rgba(255,255,255,0.6)', fontSize: '14px'}}>{item.text}</p>
               </div>
             ))}
+            <button
+              onClick={() => navigate('/contact')}
+              style={{
+                marginTop: '12px',
+                background: 'linear-gradient(135deg, #db2777, #9d174d)',
+                color: 'white', border: 'none',
+                padding: '10px 20px', borderRadius: '20px',
+                cursor: 'pointer', fontWeight: '700',
+                fontSize: '13px'
+              }}
+            >
+              📨 Contact Us
+            </button>
           </div>
         </div>
 
