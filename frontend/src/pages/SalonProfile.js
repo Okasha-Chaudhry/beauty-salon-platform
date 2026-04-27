@@ -1,3 +1,4 @@
+import MapComponent from '../components/MapComponent';
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getSalon, createBooking, getReviews, createReview } from '../services/api';
@@ -178,43 +179,61 @@ const SalonProfile = () => {
           ))}
         </div>
 
-        {/* About Tab */}
-        {activeTab === 'about' && (
+{/* About Tab */}
+{activeTab === 'about' && (
+  <div>
+    <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '16px', marginBottom: '24px'}}>
+      {salon.services.map((service, i) => (
+        <div key={i} style={{
+          background: 'white', borderRadius: '16px',
+          padding: '24px', textAlign: 'center',
+          boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
+          border: '1px solid #fce7f3',
+          transition: 'transform 0.3s'
+        }}>
+          <span style={{fontSize: '40px'}}>💅</span>
+          <p style={{fontWeight: '700', marginTop: '12px', color: '#1f2937', fontFamily: "'Playfair Display', serif"}}>{service}</p>
+        </div>
+      ))}
+    </div>
+    <div style={{background: 'white', borderRadius: '16px', padding: '24px', boxShadow: '0 4px 20px rgba(0,0,0,0.05)'}}>
+      <h3 style={{fontFamily: "'Playfair Display', serif", fontSize: '22px', marginBottom: '16px', color: '#1f2937'}}>Salon Information</h3>
+      {[
+        { icon: '📍', label: 'Location', value: salon.location },
+        { icon: '🕐', label: 'Working Hours', value: salon.workingHours },
+        { icon: '📞', label: 'Contact', value: salon.contactInfo },
+        { icon: '💰', label: 'Price Range', value: salon.priceRange },
+      ].map((item, i) => (
+        <div key={i} style={{display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 0', borderBottom: i < 3 ? '1px solid #f3f4f6' : 'none'}}>
+          <span style={{fontSize: '20px'}}>{item.icon}</span>
           <div>
-            <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '16px', marginBottom: '24px'}}>
-              {salon.services.map((service, i) => (
-                <div key={i} style={{
-                  background: 'white', borderRadius: '16px',
-                  padding: '24px', textAlign: 'center',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
-                  border: '1px solid #fce7f3',
-                  transition: 'transform 0.3s'
-                }}>
-                  <span style={{fontSize: '40px'}}>💅</span>
-                  <p style={{fontWeight: '700', marginTop: '12px', color: '#1f2937', fontFamily: "'Playfair Display', serif"}}>{service}</p>
-                </div>
-              ))}
-            </div>
-            <div style={{background: 'white', borderRadius: '16px', padding: '24px', boxShadow: '0 4px 20px rgba(0,0,0,0.05)'}}>
-              <h3 style={{fontFamily: "'Playfair Display', serif", fontSize: '22px', marginBottom: '16px', color: '#1f2937'}}>Salon Information</h3>
-              {[
-                { icon: '📍', label: 'Location', value: salon.location },
-                { icon: '🕐', label: 'Working Hours', value: salon.workingHours },
-                { icon: '📞', label: 'Contact', value: salon.contactInfo },
-                { icon: '💰', label: 'Price Range', value: salon.priceRange },
-              ].map((item, i) => (
-                <div key={i} style={{display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 0', borderBottom: i < 3 ? '1px solid #f3f4f6' : 'none'}}>
-                  <span style={{fontSize: '20px'}}>{item.icon}</span>
-                  <div>
-                    <p style={{color: '#6b7280', fontSize: '12px', fontWeight: '600', letterSpacing: '1px'}}>{item.label.toUpperCase()}</p>
-                    <p style={{fontWeight: '600', color: '#1f2937', marginTop: '2px'}}>{item.value}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <p style={{color: '#6b7280', fontSize: '12px', fontWeight: '600', letterSpacing: '1px'}}>{item.label.toUpperCase()}</p>
+            <p style={{fontWeight: '600', color: '#1f2937', marginTop: '2px'}}>{item.value}</p>
           </div>
-        )}
+        </div>
+      ))}
+    </div>
 
+    {/* 👇 ADD MAP HERE */}
+    {salon.coordinates?.lat && (
+      <div style={{ marginTop: '20px' }}>
+        <h3 style={{
+          fontFamily: "'Playfair Display', serif",
+          fontSize: '22px', marginBottom: '16px', color: '#1f2937'
+        }}>
+          📍 Location on Map
+        </h3>
+        <MapComponent
+          lat={salon.coordinates.lat}
+          lng={salon.coordinates.lng}
+          salonName={salon.name}
+          address={salon.address || salon.location}
+        />
+      </div>
+    )}
+
+  </div>
+)}
         {/* Booking Tab */}
         {activeTab === 'booking' && (
           <div style={{background: 'white', borderRadius: '20px', padding: '32px', boxShadow: '0 4px 20px rgba(0,0,0,0.05)'}}>

@@ -1,3 +1,4 @@
+import AddressSearch from '../components/AddressSearch';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API from '../services/api';
@@ -17,6 +18,8 @@ const SalonOwnerDashboard = () => {
 
   const [salonForm, setSalonForm] = useState({
     name: '', description: '', location: '',
+      address: '', // 👈 ADD
+      coordinates: { lat: null, lng: null }, // 👈 ADD
     priceRange: '', contactInfo: '', workingHours: '', services: ''
   });
 
@@ -145,30 +148,68 @@ const SalonOwnerDashboard = () => {
 
           <form onSubmit={handleCreateSalon}>
             {[
-              { label: 'Salon Name', key: 'name', placeholder: 'e.g. Glamour Studio' },
-              { label: 'Description', key: 'description', placeholder: 'Describe your salon...' },
-              { label: 'Location', key: 'location', placeholder: 'e.g. Multan, Punjab' },
-              { label: 'Price Range', key: 'priceRange', placeholder: 'e.g. Rs. 500 - 3000' },
-              { label: 'Contact Info', key: 'contactInfo', placeholder: 'e.g. 0300-1234567' },
-              { label: 'Working Hours', key: 'workingHours', placeholder: 'e.g. 9am - 8pm' },
-              { label: 'Services (comma separated)', key: 'services', placeholder: 'e.g. Haircut, Facial, Manicure' },
-            ].map((field, i) => (
-              <div key={i} style={{ marginBottom: '16px' }}>
-                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '700', color: '#374151', fontSize: '14px' }}>
-                  {field.label}
-                </label>
-                <input
-                  type="text"
-                  value={salonForm[field.key]}
-                  onChange={e => setSalonForm({ ...salonForm, [field.key]: e.target.value })}
-                  placeholder={field.placeholder}
-                  required
-                  style={inputStyle}
-                  onFocus={e => e.target.style.borderColor = '#db2777'}
-                  onBlur={e => e.target.style.borderColor = '#fce7f3'}
-                />
-              </div>
-            ))}
+  { label: 'Salon Name', key: 'name', placeholder: 'e.g. Glamour Studio' },
+  { label: 'Description', key: 'description', placeholder: 'Describe your salon...' },
+  { label: 'Price Range', key: 'priceRange', placeholder: 'e.g. Rs. 500 - 3000' },
+  { label: 'Contact Info', key: 'contactInfo', placeholder: 'e.g. 0300-1234567' },
+  { label: 'Working Hours', key: 'workingHours', placeholder: 'e.g. 9am - 8pm' },
+].map((field, i) => (
+  <div key={i} style={{ marginBottom: '16px' }}>
+    <label style={{ display: 'block', marginBottom: '8px', fontWeight: '700', color: '#374151', fontSize: '14px' }}>
+      {field.label}
+    </label>
+    <input
+      type="text"
+      value={salonForm[field.key]}
+      onChange={e => setSalonForm({ ...salonForm, [field.key]: e.target.value })}
+      placeholder={field.placeholder}
+      required
+      style={inputStyle}
+      onFocus={e => e.target.style.borderColor = '#db2777'}
+      onBlur={e => e.target.style.borderColor = '#fce7f3'}
+    />
+  </div>
+))}
+
+{/* 👇 ADDRESS SEARCH — ADD HERE */}
+<div style={{ marginBottom: '16px' }}>
+  <label style={{ display: 'block', marginBottom: '8px', fontWeight: '700', color: '#374151', fontSize: '14px' }}>
+    📍 Full Address
+  </label>
+  <AddressSearch
+    defaultValue={salonForm.address}
+    onAddressSelect={({ address, lat, lng }) => {
+      setSalonForm({
+        ...salonForm,
+        address: address,
+        location: address.split(',').slice(0, 2).join(','),
+        coordinates: { lat, lng }
+      });
+    }}
+  />
+  {salonForm.coordinates?.lat && (
+    <p style={{ color: '#16a34a', fontSize: '12px', marginTop: '6px', fontWeight: '600' }}>
+      ✅ Location selected: {salonForm.coordinates.lat.toFixed(4)}, {salonForm.coordinates.lng.toFixed(4)}
+    </p>
+  )}
+</div>
+
+{/* Services field separately */}
+<div style={{ marginBottom: '16px' }}>
+  <label style={{ display: 'block', marginBottom: '8px', fontWeight: '700', color: '#374151', fontSize: '14px' }}>
+    Services (comma separated)
+  </label>
+  <input
+    type="text"
+    value={salonForm.services}
+    onChange={e => setSalonForm({ ...salonForm, services: e.target.value })}
+    placeholder="e.g. Haircut, Facial, Manicure"
+    required
+    style={inputStyle}
+    onFocus={e => e.target.style.borderColor = '#db2777'}
+    onBlur={e => e.target.style.borderColor = '#fce7f3'}
+  />
+</div>
             <button type="submit" style={{
               width: '100%', padding: '14px',
               background: 'linear-gradient(135deg, #db2777, #9d174d)',
@@ -338,15 +379,65 @@ const SalonOwnerDashboard = () => {
 
             {editMode ? (
               <form onSubmit={handleUpdateSalon}>
-                {[
-                  { label: 'Salon Name', key: 'name' },
-                  { label: 'Description', key: 'description' },
-                  { label: 'Location', key: 'location' },
-                  { label: 'Price Range', key: 'priceRange' },
-                  { label: 'Contact Info', key: 'contactInfo' },
-                  { label: 'Working Hours', key: 'workingHours' },
-                  { label: 'Services (comma separated)', key: 'services' },
-                ].map((field, i) => (
+                     {[
+  { label: 'Salon Name', key: 'name' },
+  { label: 'Description', key: 'description' },
+  { label: 'Price Range', key: 'priceRange' },
+  { label: 'Contact Info', key: 'contactInfo' },
+  { label: 'Working Hours', key: 'workingHours' },
+].map((field, i) => (
+  <div key={i} style={{ marginBottom: '16px' }}>
+    <label style={{ display: 'block', marginBottom: '8px', fontWeight: '700', color: '#374151', fontSize: '14px' }}>
+      {field.label}
+    </label>
+    <input
+      type="text"
+      value={salonForm[field.key] || ''}
+      onChange={e => setSalonForm({ ...salonForm, [field.key]: e.target.value })}
+      style={inputStyle}
+      onFocus={e => e.target.style.borderColor = '#db2777'}
+      onBlur={e => e.target.style.borderColor = '#fce7f3'}
+    />
+  </div>
+))}
+
+{/* 👇 ADDRESS SEARCH — ADD HERE */}
+<div style={{ marginBottom: '16px' }}>
+  <label style={{ display: 'block', marginBottom: '8px', fontWeight: '700', color: '#374151', fontSize: '14px' }}>
+    📍 Full Address
+  </label>
+  <AddressSearch
+    defaultValue={salonForm.address}
+    onAddressSelect={({ address, lat, lng }) => {
+      setSalonForm({
+        ...salonForm,
+        address: address,
+        location: address.split(',').slice(0, 2).join(','),
+        coordinates: { lat, lng }
+      });
+    }}
+  />
+  {salonForm.coordinates?.lat && (
+    <p style={{ color: '#16a34a', fontSize: '12px', marginTop: '6px', fontWeight: '600' }}>
+      ✅ Location selected: {salonForm.coordinates.lat.toFixed(4)}, {salonForm.coordinates.lng.toFixed(4)}
+    </p>
+  )}
+</div>
+
+{/* Services field separately */}
+<div style={{ marginBottom: '16px' }}>
+  <label style={{ display: 'block', marginBottom: '8px', fontWeight: '700', color: '#374151', fontSize: '14px' }}>
+    Services (comma separated)
+  </label>
+  <input
+    type="text"
+    value={salonForm.services || ''}
+    onChange={e => setSalonForm({ ...salonForm, services: e.target.value })}
+    style={inputStyle}
+    onFocus={e => e.target.style.borderColor = '#db2777'}
+    onBlur={e => e.target.style.borderColor = '#fce7f3'}
+  />
+</div>
                   <div key={i} style={{ marginBottom: '16px' }}>
                     <label style={{ display: 'block', marginBottom: '8px', fontWeight: '700', color: '#374151', fontSize: '14px' }}>
                       {field.label}
