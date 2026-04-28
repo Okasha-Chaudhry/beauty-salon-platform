@@ -20,7 +20,7 @@ const SalonOwnerDashboard = () => {
     name: '', description: '', location: '',
       address: '', // 👈 ADD
       coordinates: { lat: null, lng: null }, // 👈 ADD
-    priceRange: '', contactInfo: '', workingHours: '', services: ''
+    priceRange: '', contactInfo: '', workingHours: '', services: [{ name: '', price: 0 }]
   });
 
   useEffect(() => {
@@ -35,9 +35,11 @@ const SalonOwnerDashboard = () => {
       setSalon(salonRes.data);
       setHasSalon(true);
       setSalonForm({
-        ...salonRes.data,
-        services: salonRes.data.services.join(', ')
-      });
+  ...salonRes.data,
+  services: salonRes.data.services.length > 0
+    ? salonRes.data.services
+    : [{ name: '', price: 0 }]
+});
 
     const bookingRes = await API.get(`/bookings/salon/${salonRes.data._id}`);
     setBookings(bookingRes.data);
@@ -56,7 +58,7 @@ const SalonOwnerDashboard = () => {
     try {
       const updated = await API.put(`/salons/${salon._id}`, {
         ...salonForm,
-        services: salonForm.services.split(',').map(s => s.trim())
+        services: salonForm.services
       });
       setSalon(updated.data);
       setEditMode(false);
@@ -72,7 +74,7 @@ const SalonOwnerDashboard = () => {
     try {
       const res = await API.post('/salons', {
         ...salonForm,
-        services: salonForm.services.split(',').map(s => s.trim())
+        services: salonForm
       });
       setSalon(res.data);
       setHasSalon(true);
@@ -194,21 +196,68 @@ const SalonOwnerDashboard = () => {
   )}
 </div>
 
-{/* Services field separately */}
+{/* Services with Prices */}
 <div style={{ marginBottom: '16px' }}>
   <label style={{ display: 'block', marginBottom: '8px', fontWeight: '700', color: '#374151', fontSize: '14px' }}>
-    Services (comma separated)
+    💅 Services & Prices
   </label>
-  <input
-    type="text"
-    value={salonForm.services}
-    onChange={e => setSalonForm({ ...salonForm, services: e.target.value })}
-    placeholder="e.g. Haircut, Facial, Manicure"
-    required
-    style={inputStyle}
-    onFocus={e => e.target.style.borderColor = '#db2777'}
-    onBlur={e => e.target.style.borderColor = '#fce7f3'}
-  />
+  {salonForm.services.map((service, index) => (
+    <div key={index} style={{ display: 'flex', gap: '8px', marginBottom: '8px', alignItems: 'center' }}>
+      <input
+        type="text"
+        placeholder="Service name e.g. Haircut"
+        value={service.name}
+        onChange={e => {
+          const updated = [...salonForm.services];
+          updated[index].name = e.target.value;
+          setSalonForm({ ...salonForm, services: updated });
+        }}
+        style={{ ...inputStyle, flex: 2 }}
+        onFocus={e => e.target.style.borderColor = '#db2777'}
+        onBlur={e => e.target.style.borderColor = '#fce7f3'}
+      />
+      <input
+        type="number"
+        placeholder="Price Rs."
+        value={service.price}
+        onChange={e => {
+          const updated = [...salonForm.services];
+          updated[index].price = Number(e.target.value);
+          setSalonForm({ ...salonForm, services: updated });
+        }}
+        style={{ ...inputStyle, flex: 1 }}
+        onFocus={e => e.target.style.borderColor = '#db2777'}
+        onBlur={e => e.target.style.borderColor = '#fce7f3'}
+      />
+      <button
+        type="button"
+        onClick={() => {
+          const updated = salonForm.services.filter((_, i) => i !== index);
+          setSalonForm({ ...salonForm, services: updated });
+        }}
+        style={{
+          padding: '10px 14px', background: '#fef2f2',
+          border: '1px solid #fca5a5', color: '#dc2626',
+          borderRadius: '10px', cursor: 'pointer',
+          fontWeight: '700', fontSize: '16px'
+        }}
+      >✕</button>
+    </div>
+  ))}
+  <button
+    type="button"
+    onClick={() => setSalonForm({
+      ...salonForm,
+      services: [...salonForm.services, { name: '', price: 0 }]
+    })}
+    style={{
+      padding: '10px 20px', background: '#fdf2f8',
+      border: '2px dashed #db2777', color: '#db2777',
+      borderRadius: '12px', cursor: 'pointer',
+      fontWeight: '700', fontSize: '14px', width: '100%',
+      marginTop: '8px'
+    }}
+  >+ Add Service</button>
 </div>
             <button type="submit" style={{
               width: '100%', padding: '14px',
@@ -424,35 +473,70 @@ const SalonOwnerDashboard = () => {
   )}
 </div>
 
-{/* Services field separately */}
+{/* Services with Prices */}
 <div style={{ marginBottom: '16px' }}>
   <label style={{ display: 'block', marginBottom: '8px', fontWeight: '700', color: '#374151', fontSize: '14px' }}>
-    Services (comma separated)
+    💅 Services & Prices
   </label>
-  <input
-    type="text"
-    value={salonForm.services || ''}
-    onChange={e => setSalonForm({ ...salonForm, services: e.target.value })}
-    style={inputStyle}
-    onFocus={e => e.target.style.borderColor = '#db2777'}
-    onBlur={e => e.target.style.borderColor = '#fce7f3'}
-  />
+  {salonForm.services.map((service, index) => (
+    <div key={index} style={{ display: 'flex', gap: '8px', marginBottom: '8px', alignItems: 'center' }}>
+      <input
+        type="text"
+        placeholder="Service name e.g. Haircut"
+        value={service.name}
+        onChange={e => {
+          const updated = [...salonForm.services];
+          updated[index].name = e.target.value;
+          setSalonForm({ ...salonForm, services: updated });
+        }}
+        style={{ ...inputStyle, flex: 2 }}
+        onFocus={e => e.target.style.borderColor = '#db2777'}
+        onBlur={e => e.target.style.borderColor = '#fce7f3'}
+      />
+      <input
+        type="number"
+        placeholder="Price Rs."
+        value={service.price}
+        onChange={e => {
+          const updated = [...salonForm.services];
+          updated[index].price = Number(e.target.value);
+          setSalonForm({ ...salonForm, services: updated });
+        }}
+        style={{ ...inputStyle, flex: 1 }}
+        onFocus={e => e.target.style.borderColor = '#db2777'}
+        onBlur={e => e.target.style.borderColor = '#fce7f3'}
+      />
+      <button
+        type="button"
+        onClick={() => {
+          const updated = salonForm.services.filter((_, i) => i !== index);
+          setSalonForm({ ...salonForm, services: updated });
+        }}
+        style={{
+          padding: '10px 14px', background: '#fef2f2',
+          border: '1px solid #fca5a5', color: '#dc2626',
+          borderRadius: '10px', cursor: 'pointer',
+          fontWeight: '700', fontSize: '16px'
+        }}
+      >✕</button>
+    </div>
+  ))}
+  <button
+    type="button"
+    onClick={() => setSalonForm({
+      ...salonForm,
+      services: [...salonForm.services, { name: '', price: 0 }]
+    })}
+    style={{
+      padding: '10px 20px', background: '#fdf2f8',
+      border: '2px dashed #db2777', color: '#db2777',
+      borderRadius: '12px', cursor: 'pointer',
+      fontWeight: '700', fontSize: '14px', width: '100%',
+      marginTop: '8px'
+    }}
+  >+ Add Service</button>
 </div>
-                  <div key={i} style={{ marginBottom: '16px' }}>
-                    <label style={{ display: 'block', marginBottom: '8px', fontWeight: '700', color: '#374151', fontSize: '14px' }}>
-                      {field.label}
-                    </label>
-                    <input
-                      type="text"
-                      value={salonForm[field.key] || ''}
-                      onChange={e => setSalonForm({ ...salonForm, [field.key]: e.target.value })}
-                      style={inputStyle}
-                      onFocus={e => e.target.style.borderColor = '#db2777'}
-                      onBlur={e => e.target.style.borderColor = '#fce7f3'}
-                    />
-                  </div>
-                ))}
-                <button type="submit" style={{
+<button type="submit" style={{
                   width: '100%', padding: '14px',
                   background: 'linear-gradient(135deg, #db2777, #9d174d)',
                   color: 'white', border: 'none', borderRadius: '12px',

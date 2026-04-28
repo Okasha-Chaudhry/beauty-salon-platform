@@ -41,19 +41,20 @@ const AdminDashboard = () => {
   };
 
   const handleAddSalon = async (e) => {
-    e.preventDefault();
-    try {
-      await API.post('/salons', {
-        ...newSalon,
-        services: newSalon.services.split(',').map(s => s.trim())
-      });
-      setSalonMsg('✅ Salon added successfully!');
-      setNewSalon({ name: '', description: '', location: '', priceRange: '', contactInfo: '', workingHours: '', services: '' });
-      fetchAll();
-    } catch (err) {
-      setSalonMsg('❌ Failed to add salon');
-    }
-  };
+  e.preventDefault();
+  try {
+    await API.post('/salons', {
+      ...newSalon,
+      services: newSalon.services.split(',').map(s => s.trim()),
+      images: newSalon.image ? [newSalon.image] : []
+    });
+    setSalonMsg('✅ Salon added successfully!');
+    setNewSalon({ name: '', description: '', location: '', priceRange: '', contactInfo: '', workingHours: '', services: '', image: '' });
+    fetchAll();
+  } catch (err) {
+    setSalonMsg('❌ Failed to add salon');
+  }
+};
 
   const handleDeleteSalon = async (id) => {
     if (!window.confirm('Delete this salon?')) return;
@@ -373,65 +374,77 @@ const AdminDashboard = () => {
         )}
 
         {/* Add Salon Tab */}
-        {activeTab === 'addSalon' && (
-          <div style={{background: 'white', borderRadius: '20px', padding: '32px', boxShadow: '0 4px 20px rgba(0,0,0,0.05)', maxWidth: '600px'}}>
-            <h3 style={{fontFamily: "'Playfair Display', serif", fontSize: '28px', marginBottom: '8px', color: '#1f2937'}}>Add New Salon</h3>
-            <p style={{color: '#6b7280', marginBottom: '24px'}}>Fill in the details to list a new salon</p>
+{activeTab === 'addSalon' && (
+  <div style={{background: 'white', borderRadius: '20px', padding: '32px', boxShadow: '0 4px 20px rgba(0,0,0,0.05)', maxWidth: '600px'}}>
+    <h3 style={{fontFamily: "'Playfair Display', serif", fontSize: '28px', marginBottom: '8px', color: '#1f2937'}}>Add New Salon</h3>
+    <p style={{color: '#6b7280', marginBottom: '24px'}}>Fill in the details to list a new salon</p>
 
-            {salonMsg && (
-              <div style={{
-                background: salonMsg.includes('✅') ? '#f0fdf4' : '#fef2f2',
-                border: `1px solid ${salonMsg.includes('✅') ? '#86efac' : '#fca5a5'}`,
-                color: salonMsg.includes('✅') ? '#16a34a' : '#dc2626',
-                padding: '12px 16px', borderRadius: '12px', marginBottom: '20px',
-                fontWeight: '600', textAlign: 'center'
-              }}>{salonMsg}</div>
-            )}
+    {salonMsg && (
+      <div style={{
+        background: salonMsg.includes('✅') ? '#f0fdf4' : '#fef2f2',
+        border: `1px solid ${salonMsg.includes('✅') ? '#86efac' : '#fca5a5'}`,
+        color: salonMsg.includes('✅') ? '#16a34a' : '#dc2626',
+        padding: '12px 16px', borderRadius: '12px', marginBottom: '20px',
+        fontWeight: '600', textAlign: 'center'
+      }}>{salonMsg}</div>
+    )}
 
-            <form onSubmit={handleAddSalon}>
-              {[
-                { label: 'Salon Name', key: 'name', placeholder: 'e.g. Glamour Studio' },
-                { label: 'Description', key: 'description', placeholder: 'Brief description of the salon' },
-                { label: 'Location', key: 'location', placeholder: 'e.g. Multan, Punjab' },
-                { label: 'Price Range', key: 'priceRange', placeholder: 'e.g. Rs. 500 - 3000' },
-                { label: 'Contact Info', key: 'contactInfo', placeholder: 'e.g. 0300-1234567' },
-                { label: 'Working Hours', key: 'workingHours', placeholder: 'e.g. 9am - 8pm' },
-                { label: 'Services (comma separated)', key: 'services', placeholder: 'e.g. Haircut, Facial, Manicure' },
-              ].map((field, i) => (
-                <div key={i} style={{marginBottom: '16px'}}>
-                  <label style={{display: 'block', marginBottom: '8px', fontWeight: '700', color: '#374151', fontSize: '14px'}}>{field.label}</label>
-                  <input
-                    type="text"
-                    value={newSalon[field.key]}
-                    onChange={e => setNewSalon({...newSalon, [field.key]: e.target.value})}
-                    placeholder={field.placeholder}
-                    required
-                    style={{
-                      width: '100%', padding: '12px 16px',
-                      border: '2px solid #fce7f3', borderRadius: '12px',
-                      fontSize: '15px', outline: 'none',
-                      boxSizing: 'border-box',
-                      fontFamily: "'Inter', sans-serif"
-                    }}
-                    onFocus={e => e.target.style.borderColor = '#db2777'}
-                    onBlur={e => e.target.style.borderColor = '#fce7f3'}
-                  />
-                </div>
-              ))}
-              <button
-                type="submit"
-                style={{
-                  width: '100%', padding: '14px',
-                  background: 'linear-gradient(135deg, #db2777, #9d174d)',
-                  color: 'white', border: 'none',
-                  borderRadius: '12px', fontSize: '16px',
-                  fontWeight: '700', cursor: 'pointer',
-                  boxShadow: '0 4px 15px rgba(219,39,119,0.4)'
-                }}
-              >Add Salon 💄</button>
-            </form>
-          </div>
-        )}
+    <form onSubmit={handleAddSalon}>
+      {[
+        { label: 'Salon Name', key: 'name', placeholder: 'e.g. Glamour Studio' },
+        { label: 'Description', key: 'description', placeholder: 'Brief description of the salon' },
+        { label: 'Location', key: 'location', placeholder: 'e.g. Multan, Punjab' },
+        { label: 'Price Range', key: 'priceRange', placeholder: 'e.g. Rs. 500 - 3000' },
+        { label: 'Contact Info', key: 'contactInfo', placeholder: 'e.g. 0300-1234567' },
+        { label: 'Working Hours', key: 'workingHours', placeholder: 'e.g. 9am - 8pm' },
+        { label: 'Services (comma separated)', key: 'services', placeholder: 'e.g. Haircut, Facial, Manicure' },
+      ].map((field, i) => (
+        <div key={i} style={{marginBottom: '16px'}}>
+          <label style={{display: 'block', marginBottom: '8px', fontWeight: '700', color: '#374151', fontSize: '14px'}}>{field.label}</label>
+          <input
+            type="text"
+            value={newSalon[field.key]}
+            onChange={e => setNewSalon({...newSalon, [field.key]: e.target.value})}
+            placeholder={field.placeholder}
+            required
+            style={{
+              width: '100%', padding: '12px 16px',
+              border: '2px solid #fce7f3', borderRadius: '12px',
+              fontSize: '15px', outline: 'none',
+              boxSizing: 'border-box',
+              fontFamily: "'Inter', sans-serif"
+            }}
+            onFocus={e => e.target.style.borderColor = '#db2777'}
+            onBlur={e => e.target.style.borderColor = '#fce7f3'}
+          />
+        </div>
+      ))}
+
+      {/* Image Upload */}
+      <div style={{marginBottom: '16px'}}>
+        <label style={{display: 'block', marginBottom: '8px', fontWeight: '700', color: '#374151', fontSize: '14px'}}>
+          Salon Image
+        </label>
+        <ImageUpload
+          onImageUpload={(url) => setNewSalon({...newSalon, image: url})}
+          currentImage={newSalon.image}
+        />
+      </div>
+
+      <button
+        type="submit"
+        style={{
+          width: '100%', padding: '14px',
+          background: 'linear-gradient(135deg, #db2777, #9d174d)',
+          color: 'white', border: 'none',
+          borderRadius: '12px', fontSize: '16px',
+          fontWeight: '700', cursor: 'pointer',
+          boxShadow: '0 4px 15px rgba(219,39,119,0.4)'
+        }}
+      >Add Salon 💄</button>
+    </form>
+  </div>
+)}
       </div>
     </div>
   );

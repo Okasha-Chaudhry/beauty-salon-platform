@@ -33,4 +33,8 @@ export const deleteBooking = (id) => API.delete(`/bookings/${id}`);
 export const getReviews = (salonId) => API.get(`/reviews/${salonId}`);
 export const createReview = (data) => API.post("/reviews", data);
 
+// Payment APIs
+export const createPaymentIntent = (data) => API.post("/payments/create-payment-intent", data);
+export const confirmPayment = (data) => API.post("/payments/confirm-payment", data);
+
 export default API;

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -49,7 +49,7 @@ const MapComponent = ({ lat, lng, salonName, address }) => {
           <p style={{ fontWeight: '700', color: '#1f2937', fontSize: '14px' }}>📍 {salonName}</p>
           <p style={{ color: '#6b7280', fontSize: '12px', marginTop: '2px' }}>{address}</p>
         </div>
-        
+        <a
           href={`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`}
           target="_blank"
           rel="noopener noreferrer"

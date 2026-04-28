@@ -1,7 +1,13 @@
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+import PaymentForm from '../components/PaymentForm';
+import { createPaymentIntent } from '../services/api';
 import MapComponent from '../components/MapComponent';
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getSalon, createBooking, getReviews, createReview } from '../services/api';
+
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 const SalonProfile = () => {
   const { id } = useParams();
@@ -17,6 +23,10 @@ const SalonProfile = () => {
   const [bookingErr, setBookingErr] = useState('');
   const [review, setReview] = useState({ rating: 5, comment: '' });
   const [reviewMsg, setReviewMsg] = useState('');
+  const [showPayment, setShowPayment] = useState(false);
+  const [clientSecret, setClientSecret] = useState('');
+  const [savedBookingId, setSavedBookingId] = useState('');
+  const [paymentAmount, setPaymentAmount] = useState(500);
 
   const timeSlots = ['9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM'];
 
@@ -29,13 +39,30 @@ const SalonProfile = () => {
     e.preventDefault();
     if (!user) { navigate('/login'); return; }
     try {
-      await createBooking({ customer: user._id, salon: id, ...booking });
-      setBookingMsg('✅ Booking confirmed successfully!');
+      const bookingRes = await createBooking({
+        customer: user._id,
+        salon: id,
+        ...booking
+      });
+      const newBookingId = bookingRes.data._id;
+      setSavedBookingId(newBookingId);
+      const paymentRes = await createPaymentIntent({
+        amount: paymentAmount,
+        bookingId: newBookingId
+      });
+      setClientSecret(paymentRes.data.clientSecret);
+      setShowPayment(true);
+      setBookingMsg('');
       setBookingErr('');
-      setBooking({ service: '', date: '', timeSlot: '' });
     } catch (err) {
       setBookingErr('❌ Booking failed. Please try again.');
     }
+  };
+
+  const handlePaymentSuccess = () => {
+    setShowPayment(false);
+    setBookingMsg('✅ Booking & Payment successful! You will receive a confirmation email.');
+    setBooking({ service: '', date: '', timeSlot: '' });
   };
 
   const handleReview = async (e) => {
@@ -280,7 +307,26 @@ const SalonProfile = () => {
                   style={{width: '100%', padding: '14px 16px', border: '2px solid #fce7f3', borderRadius: '12px', fontSize: '15px', outline: 'none', boxSizing: 'border-box'}}
                 />
               </div>
-
+               {/* Price Input */}
+<div style={{ marginBottom: '20px' }}>
+  <label style={{ display: 'block', marginBottom: '8px', fontWeight: '700', color: '#374151' }}>
+    Service Price (Rs.)
+  </label>
+  <input
+    type="number"
+    value={paymentAmount}
+    onChange={e => setPaymentAmount(Number(e.target.value))}
+    placeholder="Enter service price"
+    min="100"
+    required
+    style={{
+      width: '100%', padding: '14px 16px',
+      border: '2px solid #fce7f3', borderRadius: '12px',
+      fontSize: '15px', outline: 'none',
+      boxSizing: 'border-box'
+    }}
+  />
+</div>
               <div style={{marginBottom: '28px'}}>
                 <label style={{display: 'block', marginBottom: '12px', fontWeight: '700', color: '#374151'}}>Select Time Slot</label>
                 <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px'}}>
@@ -403,6 +449,27 @@ const SalonProfile = () => {
           </div>
         )}
       </div>
+   {/* Payment Modal */}
+{showPayment && clientSecret && (
+  <div style={{
+    position: 'fixed', top: 0, left: 0,
+    right: 0, bottom: 0,
+    background: 'rgba(0,0,0,0.5)',
+    display: 'flex', alignItems: 'center',
+    justifyContent: 'center', zIndex: 9999,
+    padding: '20px'
+  }}>
+    <Elements stripe={stripePromise} options={{ clientSecret }}>
+      <PaymentForm
+        clientSecret={clientSecret}
+        bookingId={savedBookingId}
+        amount={paymentAmount}
+        onSuccess={handlePaymentSuccess}
+        onCancel={() => setShowPayment(false)}
+      />
+    </Elements>
+  </div>
+)}
     </div>
   );
 };
