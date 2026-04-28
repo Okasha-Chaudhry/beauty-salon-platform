@@ -34,10 +34,14 @@ const SalonOwnerDashboard = () => {
       const salonRes = await API.get('/salons/my-salon');
       setSalon(salonRes.data);
       setHasSalon(true);
-      setSalonForm({
+         setSalonForm({
   ...salonRes.data,
   services: salonRes.data.services.length > 0
-    ? salonRes.data.services
+    ? salonRes.data.services.map(s =>
+        typeof s === 'string'
+          ? { name: s, price: 0 }  // convert old string format
+          : s                        // keep new object format
+      )
     : [{ name: '', price: 0 }]
 });
 
@@ -53,21 +57,30 @@ const SalonOwnerDashboard = () => {
     setLoading(false);
   };
 
-  const handleUpdateSalon = async (e) => {
-    e.preventDefault();
-    try {
-      const updated = await API.put(`/salons/${salon._id}`, {
-        ...salonForm,
-        services: salonForm.services
-      });
-      setSalon(updated.data);
-      setEditMode(false);
-      setSaveMsg('✅ Salon updated successfully!');
-      setTimeout(() => setSaveMsg(''), 3000);
-    } catch (err) {
-      setSaveMsg('❌ Failed to update salon');
-    }
-  };
+   const handleUpdateSalon = async (e) => {
+  e.preventDefault();
+  try {
+    const updateData = {
+      name: salonForm.name,
+      description: salonForm.description,
+      location: salonForm.location,
+      address: salonForm.address,
+      coordinates: salonForm.coordinates,
+      priceRange: salonForm.priceRange,
+      contactInfo: salonForm.contactInfo,
+      workingHours: salonForm.workingHours,
+      services: salonForm.services.filter(s => s.name.trim() !== ''),
+    };
+    const updated = await API.put(`/salons/${salon._id}`, updateData);
+    setSalon(updated.data);
+    setEditMode(false);
+    setSaveMsg('✅ Salon updated successfully!');
+    setTimeout(() => setSaveMsg(''), 3000);
+  } catch (err) {
+    console.error('Update error:', err.response?.data || err.message);
+    setSaveMsg('❌ ' + (err.response?.data?.message || err.message));
+  }
+};
 
   const handleCreateSalon = async (e) => {
     e.preventDefault();
