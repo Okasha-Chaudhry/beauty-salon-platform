@@ -229,12 +229,15 @@ const HomePage = () => {
                   <p style={{color: '#6b7280', marginTop: '4px', fontSize: '14px', lineHeight: '1.5'}}>{salon.description}</p>
 
                   <div style={{marginTop: '14px', display: 'flex', flexWrap: 'wrap', gap: '6px'}}>
-                    {salon.services.slice(0, 3).map((service, i) => (
-                      <span key={i} style={{
-                        backgroundColor: '#fdf2f8', color: '#db2777',
-                        padding: '4px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: '600'
-                      }}>{service}</span>
-                    ))}
+                   {salon.services.slice(0, 3).map((service, i) => (
+                   <span key={i} style={{
+                    backgroundColor: '#fdf2f8', color: '#db2777',
+                    padding: '4px 12px', borderRadius: '20px',
+                    fontSize: '12px', fontWeight: '600'
+                   }}>
+                   {service.name} — Rs.{service.price}
+                  </span>
+                   ))}
                     {salon.services.length > 3 && (
                       <span style={{color: '#6b7280', fontSize: '12px', padding: '4px 8px'}}>+{salon.services.length - 3} more</span>
                     )}

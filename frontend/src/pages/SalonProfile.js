@@ -26,7 +26,7 @@ const SalonProfile = () => {
   const [showPayment, setShowPayment] = useState(false);
   const [clientSecret, setClientSecret] = useState('');
   const [savedBookingId, setSavedBookingId] = useState('');
-  const [paymentAmount, setPaymentAmount] = useState(500);
+  const [paymentAmount, setPaymentAmount] = useState(0);
 
   const timeSlots = ['9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM'];
 
@@ -172,7 +172,7 @@ const SalonProfile = () => {
                 background: 'linear-gradient(135deg, #db2777, #9d174d)',
                 color: 'white', padding: '6px 16px',
                 borderRadius: '20px', fontSize: '13px', fontWeight: '600'
-              }}>{service}</span>
+              }}>{typeof service === 'string' ? service : service.name}</span>
             ))}
           </div>
         </div>
@@ -206,61 +206,62 @@ const SalonProfile = () => {
           ))}
         </div>
 
-{/* About Tab */}
-{activeTab === 'about' && (
-  <div>
-    <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '16px', marginBottom: '24px'}}>
-      {salon.services.map((service, i) => (
-        <div key={i} style={{
-          background: 'white', borderRadius: '16px',
-          padding: '24px', textAlign: 'center',
-          boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
-          border: '1px solid #fce7f3',
-          transition: 'transform 0.3s'
-        }}>
-          <span style={{fontSize: '40px'}}>💅</span>
-          <p style={{fontWeight: '700', marginTop: '12px', color: '#1f2937', fontFamily: "'Playfair Display', serif"}}>{service}</p>
-        </div>
-      ))}
-    </div>
-    <div style={{background: 'white', borderRadius: '16px', padding: '24px', boxShadow: '0 4px 20px rgba(0,0,0,0.05)'}}>
-      <h3 style={{fontFamily: "'Playfair Display', serif", fontSize: '22px', marginBottom: '16px', color: '#1f2937'}}>Salon Information</h3>
-      {[
-        { icon: '📍', label: 'Location', value: salon.location },
-        { icon: '🕐', label: 'Working Hours', value: salon.workingHours },
-        { icon: '📞', label: 'Contact', value: salon.contactInfo },
-        { icon: '💰', label: 'Price Range', value: salon.priceRange },
-      ].map((item, i) => (
-        <div key={i} style={{display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 0', borderBottom: i < 3 ? '1px solid #f3f4f6' : 'none'}}>
-          <span style={{fontSize: '20px'}}>{item.icon}</span>
+        {/* About Tab */}
+        {activeTab === 'about' && (
           <div>
-            <p style={{color: '#6b7280', fontSize: '12px', fontWeight: '600', letterSpacing: '1px'}}>{item.label.toUpperCase()}</p>
-            <p style={{fontWeight: '600', color: '#1f2937', marginTop: '2px'}}>{item.value}</p>
+            <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '16px', marginBottom: '24px'}}>
+              {salon.services.map((service, i) => (
+                <div key={i} style={{
+                  background: 'white', borderRadius: '16px',
+                  padding: '24px', textAlign: 'center',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
+                  border: '1px solid #fce7f3'
+                }}>
+                  <span style={{fontSize: '40px'}}>💅</span>
+                  <p style={{fontWeight: '700', marginTop: '12px', color: '#1f2937', fontFamily: "'Playfair Display', serif"}}>
+                    {typeof service === 'string' ? service : service.name}
+                  </p>
+                  <p style={{color: '#db2777', fontWeight: '700', fontSize: '18px', marginTop: '4px'}}>
+                    {typeof service === 'string' ? '' : `Rs. ${service.price}`}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <div style={{background: 'white', borderRadius: '16px', padding: '24px', boxShadow: '0 4px 20px rgba(0,0,0,0.05)'}}>
+              <h3 style={{fontFamily: "'Playfair Display', serif", fontSize: '22px', marginBottom: '16px', color: '#1f2937'}}>Salon Information</h3>
+              {[
+                { icon: '📍', label: 'Location', value: salon.location },
+                { icon: '🕐', label: 'Working Hours', value: salon.workingHours },
+                { icon: '📞', label: 'Contact', value: salon.contactInfo },
+                { icon: '💰', label: 'Price Range', value: salon.priceRange },
+              ].map((item, i) => (
+                <div key={i} style={{display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 0', borderBottom: i < 3 ? '1px solid #f3f4f6' : 'none'}}>
+                  <span style={{fontSize: '20px'}}>{item.icon}</span>
+                  <div>
+                    <p style={{color: '#6b7280', fontSize: '12px', fontWeight: '600', letterSpacing: '1px'}}>{item.label.toUpperCase()}</p>
+                    <p style={{fontWeight: '600', color: '#1f2937', marginTop: '2px'}}>{item.value}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Map */}
+            {salon.coordinates?.lat && (
+              <div style={{ marginTop: '20px' }}>
+                <h3 style={{fontFamily: "'Playfair Display', serif", fontSize: '22px', marginBottom: '16px', color: '#1f2937'}}>
+                  📍 Location on Map
+                </h3>
+                <MapComponent
+                  lat={salon.coordinates.lat}
+                  lng={salon.coordinates.lng}
+                  salonName={salon.name}
+                  address={salon.address || salon.location}
+                />
+              </div>
+            )}
           </div>
-        </div>
-      ))}
-    </div>
+        )}
 
-    {/* 👇 ADD MAP HERE */}
-    {salon.coordinates?.lat && (
-      <div style={{ marginTop: '20px' }}>
-        <h3 style={{
-          fontFamily: "'Playfair Display', serif",
-          fontSize: '22px', marginBottom: '16px', color: '#1f2937'
-        }}>
-          📍 Location on Map
-        </h3>
-        <MapComponent
-          lat={salon.coordinates.lat}
-          lng={salon.coordinates.lng}
-          salonName={salon.name}
-          address={salon.address || salon.location}
-        />
-      </div>
-    )}
-
-  </div>
-)}
         {/* Booking Tab */}
         {activeTab === 'booking' && (
           <div style={{background: 'white', borderRadius: '20px', padding: '32px', boxShadow: '0 4px 20px rgba(0,0,0,0.05)'}}>
@@ -283,19 +284,47 @@ const SalonProfile = () => {
             )}
 
             <form onSubmit={handleBooking}>
+              {/* Service Selection */}
               <div style={{marginBottom: '20px'}}>
                 <label style={{display: 'block', marginBottom: '8px', fontWeight: '700', color: '#374151'}}>Select Service</label>
                 <select
                   value={booking.service}
-                  onChange={e => setBooking({...booking, service: e.target.value})}
+                  onChange={e => {
+                    const selectedService = salon.services.find(s => (typeof s === 'string' ? s : s.name) === e.target.value);
+                    setBooking({...booking, service: e.target.value});
+                    if (selectedService && selectedService.price) setPaymentAmount(selectedService.price);
+                  }}
                   required
                   style={{width: '100%', padding: '14px 16px', border: '2px solid #fce7f3', borderRadius: '12px', fontSize: '15px', outline: 'none', background: 'white'}}
                 >
                   <option value="">Choose a service...</option>
-                  {salon.services.map((s, i) => <option key={i} value={s}>{s}</option>)}
+                  {salon.services.map((s, i) => (
+                    <option key={i} value={typeof s === 'string' ? s : s.name}>
+                      {typeof s === 'string' ? s : `${s.name} — Rs. ${s.price}`}
+                    </option>
+                  ))}
                 </select>
               </div>
 
+              {/* Auto price display */}
+              {booking.service && paymentAmount > 0 && (
+                <div style={{
+                  marginBottom: '20px', padding: '16px',
+                  background: '#fdf2f8', borderRadius: '12px',
+                  border: '2px solid #fce7f3',
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'center'
+                }}>
+                  <div>
+                    <p style={{color: '#6b7280', fontSize: '13px', fontWeight: '600'}}>SERVICE PRICE</p>
+                    <p style={{fontSize: '28px', fontWeight: '700', color: '#db2777', fontFamily: "'Playfair Display', serif"}}>
+                      Rs. {paymentAmount}
+                    </p>
+                  </div>
+                  <span style={{fontSize: '36px'}}>💅</span>
+                </div>
+              )}
+
+              {/* Date */}
               <div style={{marginBottom: '20px'}}>
                 <label style={{display: 'block', marginBottom: '8px', fontWeight: '700', color: '#374151'}}>Select Date</label>
                 <input
@@ -307,26 +336,8 @@ const SalonProfile = () => {
                   style={{width: '100%', padding: '14px 16px', border: '2px solid #fce7f3', borderRadius: '12px', fontSize: '15px', outline: 'none', boxSizing: 'border-box'}}
                 />
               </div>
-               {/* Price Input */}
-<div style={{ marginBottom: '20px' }}>
-  <label style={{ display: 'block', marginBottom: '8px', fontWeight: '700', color: '#374151' }}>
-    Service Price (Rs.)
-  </label>
-  <input
-    type="number"
-    value={paymentAmount}
-    onChange={e => setPaymentAmount(Number(e.target.value))}
-    placeholder="Enter service price"
-    min="100"
-    required
-    style={{
-      width: '100%', padding: '14px 16px',
-      border: '2px solid #fce7f3', borderRadius: '12px',
-      fontSize: '15px', outline: 'none',
-      boxSizing: 'border-box'
-    }}
-  />
-</div>
+
+              {/* Time Slots */}
               <div style={{marginBottom: '28px'}}>
                 <label style={{display: 'block', marginBottom: '12px', fontWeight: '700', color: '#374151'}}>Select Time Slot</label>
                 <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px'}}>
@@ -449,27 +460,28 @@ const SalonProfile = () => {
           </div>
         )}
       </div>
-   {/* Payment Modal */}
-{showPayment && clientSecret && (
-  <div style={{
-    position: 'fixed', top: 0, left: 0,
-    right: 0, bottom: 0,
-    background: 'rgba(0,0,0,0.5)',
-    display: 'flex', alignItems: 'center',
-    justifyContent: 'center', zIndex: 9999,
-    padding: '20px'
-  }}>
-    <Elements stripe={stripePromise} options={{ clientSecret }}>
-      <PaymentForm
-        clientSecret={clientSecret}
-        bookingId={savedBookingId}
-        amount={paymentAmount}
-        onSuccess={handlePaymentSuccess}
-        onCancel={() => setShowPayment(false)}
-      />
-    </Elements>
-  </div>
-)}
+
+      {/* Payment Modal */}
+      {showPayment && clientSecret && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0,
+          right: 0, bottom: 0,
+          background: 'rgba(0,0,0,0.5)',
+          display: 'flex', alignItems: 'center',
+          justifyContent: 'center', zIndex: 9999,
+          padding: '20px'
+        }}>
+          <Elements stripe={stripePromise} options={{ clientSecret }}>
+            <PaymentForm
+              clientSecret={clientSecret}
+              bookingId={savedBookingId}
+              amount={paymentAmount}
+              onSuccess={handlePaymentSuccess}
+              onCancel={() => setShowPayment(false)}
+            />
+          </Elements>
+        </div>
+      )}
     </div>
   );
 };

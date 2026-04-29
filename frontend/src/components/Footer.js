@@ -64,7 +64,7 @@ const Footer = () => {
               Services
             </h4>
             {['Haircut & Styling', 'Facial & Skincare', 'Manicure & Pedicure', 'Bridal Makeup', 'Hair Coloring'].map((s, i) => (
-              <p key={i} style={{color: 'rgba(255,255,255,0.6)', fontSize: '14px', marginBottom: '10px'}}>→ {s}</p>
+              <p key={i} style={{color: 'rgba(255,255,255,0.6)', fontSize: '14px', marginBottom: '10px'}}>→ {s.name || s}</p>
             ))}
           </div>
 

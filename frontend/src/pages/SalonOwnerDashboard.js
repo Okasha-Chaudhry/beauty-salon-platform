@@ -581,13 +581,15 @@ const SalonOwnerDashboard = () => {
                 <div style={{ marginTop: '14px' }}>
                   <p style={{ color: '#9ca3af', fontSize: '12px', fontWeight: '600', letterSpacing: '1px', marginBottom: '8px' }}>SERVICES</p>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                    {salon?.services?.map((s, i) => (
-                      <span key={i} style={{
-                        background: 'linear-gradient(135deg, #db2777, #9d174d)',
-                        color: 'white', padding: '6px 16px',
-                        borderRadius: '20px', fontSize: '13px', fontWeight: '600'
-                      }}>{s}</span>
-                    ))}
+                {salon?.services?.map((s, i) => (
+  <span key={i} style={{
+    background: 'linear-gradient(135deg, #db2777, #9d174d)',
+    color: 'white', padding: '6px 16px',
+    borderRadius: '20px', fontSize: '13px', fontWeight: '600'
+  }}>
+    {typeof s === 'string' ? s : `${s.name} — Rs. ${s.price}`}
+  </span>
+))}
                   </div>
                 </div>
               </div>

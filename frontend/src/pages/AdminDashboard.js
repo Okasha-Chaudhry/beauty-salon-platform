@@ -251,8 +251,10 @@ const AdminDashboard = () => {
                       <p style={{color: '#6b7280', fontSize: '14px'}}>📍 {salon.location} | 💰 {salon.priceRange}</p>
                       <div style={{display: 'flex', gap: '6px', marginTop: '6px', flexWrap: 'wrap'}}>
                         {salon.services.slice(0, 3).map((s, j) => (
-                          <span key={j} style={{background: '#fdf2f8', color: '#db2777', padding: '2px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: '600'}}>{s}</span>
-                        ))}
+                       <span key={j} style={{background: '#fdf2f8', color: '#db2777', padding: '2px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: '600'}}>
+                        {s.name || s}
+                         </span>
+                ))}
                       </div>
                     </div>
                   </div>
