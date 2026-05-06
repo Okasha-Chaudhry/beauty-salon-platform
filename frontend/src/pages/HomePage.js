@@ -166,7 +166,7 @@ const HomePage = () => {
                 transition: 'all 0.3s'
               }}
             >
-              {service}
+              {service.name}
             </button>
           ))}
         </div>

@@ -18,6 +18,210 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Playfair Display', serif;
 }
 
+/* ========== GLOBAL RESPONSIVE ========== */
+
+/* Prevent horizontal overflow on all devices */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Make all images responsive */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ========== NAVBAR RESPONSIVE ========== */
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .navbar-links {
+    display: none;
+  }
+  .navbar-links.open {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 70px;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #db2777, #9d174d);
+    padding: 20px;
+    gap: 16px;
+    z-index: 999;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  }
+  .hamburger {
+    display: flex !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .hamburger {
+    display: none !important;
+  }
+  .navbar-links {
+    display: flex !important;
+  }
+}
+
+/* ========== HERO SECTION ========== */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 32px !important;
+  }
+  .hero-subtitle {
+    font-size: 15px !important;
+  }
+  .hero-search {
+    flex-direction: column !important;
+    border-radius: 16px !important;
+    padding: 8px !important;
+  }
+  .hero-search input {
+    border-radius: 12px !important;
+    width: 100% !important;
+  }
+  .hero-search button {
+    border-radius: 12px !important;
+    width: 100% !important;
+  }
+  .hero-stats {
+    gap: 20px !important;
+  }
+}
+
+/* ========== CARDS GRID ========== */
+@media (max-width: 768px) {
+  .salons-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* ========== DASHBOARD ========== */
+@media (max-width: 768px) {
+  .dashboard-padding {
+    padding: 16px !important;
+  }
+  .dashboard-header {
+    padding: 24px 16px !important;
+  }
+  .dashboard-title {
+    font-size: 28px !important;
+  }
+  .tabs-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tab-button {
+    min-width: 100px;
+    font-size: 12px !important;
+    padding: 10px 8px !important;
+  }
+}
+
+/* ========== BOOKING FORM ========== */
+@media (max-width: 768px) {
+  .time-slots-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .booking-form {
+    padding: 20px !important;
+  }
+}
+
+/* ========== AUTH PAGES ========== */
+@media (max-width: 768px) {
+  .auth-left-panel {
+    display: none !important;
+  }
+  .auth-right-panel {
+    flex: 1 !important;
+    padding: 24px !important;
+  }
+}
+
+/* ========== SALON PROFILE ========== */
+@media (max-width: 768px) {
+  .salon-hero {
+    height: 200px !important;
+  }
+  .salon-hero h1 {
+    font-size: 28px !important;
+  }
+  .salon-info-card {
+    padding: 16px !important;
+    margin: -20px 16px 0 !important;
+  }
+  .salon-details-row {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+}
+
+/* ========== GENERAL PADDING FIX ========== */
+@media (max-width: 768px) {
+  .page-padding {
+    padding: 16px !important;
+  }
+  .section-padding {
+    padding: 40px 16px !important;
+  }
+  .card-padding {
+    padding: 16px !important;
+  }
+  .max-width-container {
+    padding: 0 16px !important;
+  }
+}
+
+/* ========== TYPOGRAPHY ========== */
+@media (max-width: 768px) {
+  .display-title {
+    font-size: 28px !important;
+  }
+  .section-title {
+    font-size: 24px !important;
+  }
+}
+
+/* ========== BUTTONS ========== */
+@media (max-width: 768px) {
+  .full-width-mobile {
+    width: 100% !important;
+  }
+}
+
+/* ========== HOW IT WORKS ========== */
+@media (max-width: 768px) {
+  .steps-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* ========== MY BOOKINGS ========== */
+@media (max-width: 768px) {
+  .booking-card-actions {
+    flex-direction: column !important;
+  }
+  .booking-details-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* Utility classes */
 .gradient-bg {
   background: linear-gradient(135deg, #db2777 0%, #9d174d 100%);
 }
