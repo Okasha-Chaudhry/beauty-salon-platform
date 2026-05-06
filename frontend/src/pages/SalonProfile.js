@@ -103,22 +103,43 @@ const SalonProfile = () => {
   return (
     <div style={{minHeight: '100vh', background: '#f9fafb'}}>
 
-      {/* Hero Banner */}
-      <div style={{
-        height: '300px',
-        background: 'linear-gradient(135deg, #db2777 0%, #9d174d 100%)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        position: 'relative', overflow: 'hidden'
-      }}>
-        <div style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '30px 30px'}}/>
-        <div style={{textAlign: 'center', color: 'white', position: 'relative', zIndex: 1}}>
-          <span style={{fontSize: '64px'}}>💄</span>
-          <h1 style={{fontFamily: "'Playfair Display', serif", fontSize: '48px', fontWeight: '700', marginTop: '8px'}}>{salon.name}</h1>
-          <p style={{opacity: 0.85, fontSize: '18px', marginTop: '8px'}}>{salon.description}</p>
-        </div>
-      </div>
-
-      <div style={{maxWidth: '1000px', margin: '-40px auto 0', padding: '0 32px 60px', position: 'relative', zIndex: 1}}>
+ {/* Hero Banner */}
+<div style={{
+  height: '300px',
+  background: salon.images && salon.images.length > 0
+    ? 'none'
+    : 'linear-gradient(135deg, #db2777 0%, #9d174d 100%)',
+  position: 'relative', overflow: 'hidden'
+}}>
+  {salon.images && salon.images.length > 0 ? (
+    <img
+      src={salon.images[0].url}
+      alt={salon.name}
+      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+    />
+  ) : (
+    <div style={{
+      height: '100%',
+      background: 'linear-gradient(135deg, #db2777 0%, #9d174d 100%)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center'
+    }}>
+      <span style={{fontSize: '64px'}}>💄</span>
+    </div>
+  )}
+  {/* Overlay with salon name */}
+  <div style={{
+    position: 'absolute', bottom: 0, left: 0, right: 0,
+    background: 'linear-gradient(transparent, rgba(0,0,0,0.7))',
+    padding: '40px 32px 24px',
+    color: 'white'
+  }}>
+    <h1 style={{
+      fontFamily: "'Playfair Display', serif",
+      fontSize: '48px', fontWeight: '700'
+    }}>{salon.name}</h1>
+    <p style={{opacity: 0.85, fontSize: '18px', marginTop: '8px'}}>{salon.description}</p>
+  </div>
+</div>
 
         {/* Info Card */}
         <div style={{
@@ -459,8 +480,6 @@ const SalonProfile = () => {
             )}
           </div>
         )}
-      </div>
-
       {/* Payment Modal */}
       {showPayment && clientSecret && (
         <div style={{

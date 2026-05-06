@@ -20,7 +20,10 @@ const salonSchema = new mongoose.Schema({
   contactInfo: { type: String },
   workingHours: { type: String },
   ratings: [{ type: Number }],
-  images: [String],
+  images: [{
+  url: { type: String },
+  public_id: { type: String }
+   }],
   owner: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null },
 }, { timestamps: true });
 

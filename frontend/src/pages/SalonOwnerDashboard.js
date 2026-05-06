@@ -1,3 +1,4 @@
+import ImageUpload from '../components/ImageUpload';
 import AddressSearch from '../components/AddressSearch';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -549,6 +550,14 @@ const SalonOwnerDashboard = () => {
     }}
   >+ Add Service</button>
 </div>
+{/* Image Upload */}
+{salon && (
+  <ImageUpload
+    salonId={salon._id}
+    existingImages={salon.images || []}
+    onImagesUpdated={(newImages) => setSalon({...salon, images: newImages})}
+  />
+)}
 <button type="submit" style={{
                   width: '100%', padding: '14px',
                   background: 'linear-gradient(135deg, #db2777, #9d174d)',

@@ -200,22 +200,31 @@ const HomePage = () => {
                 onMouseOver={e => { e.currentTarget.style.transform = 'translateY(-8px)'; e.currentTarget.style.boxShadow = '0 20px 40px rgba(219,39,119,0.15)'; }}
                 onMouseOut={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.08)'; }}
               >
-                {/* Salon Image Placeholder */}
-                <div style={{
-                  height: '200px',
-                  background: 'linear-gradient(135deg, #fce7f3, #db2777)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  position: 'relative'
-                }}>
-                  <span style={{fontSize: '64px'}}>💄</span>
-                  <div style={{
-                    position: 'absolute', top: '12px', right: '12px',
-                    background: 'white', borderRadius: '20px',
-                    padding: '4px 12px', fontSize: '13px', fontWeight: '600', color: '#db2777'
-                  }}>
-                    {salon.priceRange}
-                  </div>
-                </div>
+        {/* Salon Image */}
+<div style={{
+  height: '200px',
+  background: 'linear-gradient(135deg, #fce7f3, #db2777)',
+  display: 'flex', alignItems: 'center', justifyContent: 'center',
+  position: 'relative', overflow: 'hidden'
+}}>
+  {salon.images && salon.images.length > 0 ? (
+    <img
+      src={salon.images[0].url}
+      alt={salon.name}
+      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+    />
+  ) : (
+    <span style={{fontSize: '64px'}}>💄</span>
+  )}
+  <div style={{
+    position: 'absolute', top: '12px', right: '12px',
+    background: 'white', borderRadius: '20px',
+    padding: '4px 12px', fontSize: '13px',
+    fontWeight: '600', color: '#db2777'
+  }}>
+    {salon.priceRange}
+  </div>
+</div>
 
                 <div style={{padding: '20px'}}>
                   <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start'}}>

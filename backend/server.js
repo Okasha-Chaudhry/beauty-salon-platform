@@ -1,14 +1,14 @@
 const express = require("express");
 const mongoose = require("mongoose");
-
 const salonRoutes = require("./routes/salonRoutes");
 const userRoutes = require("./routes/userRoutes");
 const bookingRoutes = require("./routes/bookingRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
+const uploadRoutes = require('./routes/uploadRoutes'); // 👈 ADD
 
 const app = express();
-
+app.use('/api/upload', uploadRoutes); // 👈 ADD
 // Manual CORS headers
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");

@@ -19,6 +19,16 @@ export const getSalon = (id) => API.get(`/salons/${id}`);
 export const createSalon = (data) => API.post("/salons", data);
 export const deleteSalon = (id) => API.delete(`/salons/${id}`);
 
+// Upload APIs
+export const uploadSalonImage = (formData) => API.post('/upload/salon-image', formData, {
+  headers: { 'Content-Type': 'multipart/form-data' }
+});
+export const uploadSalonImages = (formData) => API.post('/upload/salon-images', formData, {
+  headers: { 'Content-Type': 'multipart/form-data' }
+});
+export const deleteSalonImage = (publicId) => API.delete(`/upload/salon-image/${publicId}`);
+export const saveSalonImages = (salonId, images) => API.put(`/upload/salon-images/${salonId}`, { images });
+
 // User APIs
 export const registerUser = (data) => API.post("/users/register", data);
 export const loginUser = (data) => API.post("/users/login", data);
