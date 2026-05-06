@@ -34,13 +34,16 @@ const Register = () => {
 
   return (
     <div style={{
-      minHeight: '100vh', display: 'flex',
+      minHeight: '100vh',
+      display: 'flex',
       background: 'linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%)'
     }}>
       {/* Left Side - Form */}
       <div style={{
         flex: 1, display: 'flex', alignItems: 'center',
-        justifyContent: 'center', padding: '40px'
+        justifyContent: 'center',
+        padding: '40px 24px',
+        width: '100%'
       }}>
         <div style={{width: '100%', maxWidth: '420px'}}>
           <div style={{textAlign: 'center', marginBottom: '32px'}}>
@@ -109,8 +112,7 @@ const Register = () => {
                   { value: 'customer', label: '👤 Customer', desc: 'Book appointments' },
                   { value: 'salon_owner', label: '💄 Salon Owner', desc: 'List my salon' },
                 ].map((option, i) => (
-                  <div
-                    key={i}
+                  <div key={i}
                     onClick={() => setFormData({...formData, role: option.value})}
                     style={{
                       padding: '16px', borderRadius: '12px',
@@ -128,45 +130,37 @@ const Register = () => {
               </div>
             </div>
 
-            <button
-              type="submit" disabled={loading}
-              style={{
-                width: '100%', padding: '14px',
-                background: loading ? '#f9a8d4' : 'linear-gradient(135deg, #db2777, #9d174d)',
-                color: 'white', border: 'none',
-                borderRadius: '12px', fontSize: '16px',
-                fontWeight: '700', cursor: loading ? 'not-allowed' : 'pointer',
-                fontFamily: "'Inter', sans-serif",
-                boxShadow: '0 4px 15px rgba(219,39,119,0.4)'
-              }}
-            >
+            <button type="submit" disabled={loading} style={{
+              width: '100%', padding: '14px',
+              background: loading ? '#f9a8d4' : 'linear-gradient(135deg, #db2777, #9d174d)',
+              color: 'white', border: 'none',
+              borderRadius: '12px', fontSize: '16px',
+              fontWeight: '700', cursor: loading ? 'not-allowed' : 'pointer',
+              fontFamily: "'Inter', sans-serif",
+              boxShadow: '0 4px 15px rgba(219,39,119,0.4)'
+            }}>
               {loading ? '⏳ Creating account...' : 'Create Account →'}
             </button>
           </form>
 
           <p style={{textAlign: 'center', marginTop: '24px', color: '#6b7280', fontSize: '15px'}}>
             Already have an account?{' '}
-            <span
-              onClick={() => navigate('/login')}
-              style={{color: '#db2777', cursor: 'pointer', fontWeight: '700'}}
-            >
+            <span onClick={() => navigate('/login')}
+              style={{color: '#db2777', cursor: 'pointer', fontWeight: '700'}}>
               Sign in
             </span>
           </p>
-
           <p style={{textAlign: 'center', marginTop: '12px'}}>
-            <span
-              onClick={() => navigate('/')}
-              style={{color: '#9ca3af', cursor: 'pointer', fontSize: '14px'}}
-            >
+            <span onClick={() => navigate('/')}
+              style={{color: '#9ca3af', cursor: 'pointer', fontSize: '14px'}}>
               ← Back to Home
             </span>
           </p>
         </div>
       </div>
 
-      {/* Right Side - Decorative */}
-      <div style={{
+      {/* Right Side - Decorative - Hidden on mobile */}
+      <div className="hide-mobile" style={{
         flex: 1,
         background: 'linear-gradient(135deg, #db2777 0%, #9d174d 100%)',
         display: 'flex', flexDirection: 'column',
@@ -178,9 +172,7 @@ const Register = () => {
           fontFamily: "'Playfair Display', serif",
           fontSize: '40px', fontWeight: '700',
           marginBottom: '16px', textAlign: 'center'
-        }}>
-          Join GlamourFind
-        </h2>
+        }}>Join GlamourFind</h2>
         <p style={{
           fontSize: '18px', opacity: 0.85,
           textAlign: 'center', lineHeight: '1.6',

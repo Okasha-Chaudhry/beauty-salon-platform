@@ -252,3 +252,26 @@ img {
   background: #db2777;
   border-radius: 10px;
 }
+/* ========== AUTH PAGES FIX ========== */
+.hide-mobile {
+  display: flex;
+}
+
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none !important;
+  }
+
+  /* Fix auth page container */
+  .auth-container {
+    flex-direction: column !important;
+    min-height: 100vh;
+  }
+
+  /* Fix auth form panel */
+  .auth-form-panel {
+    flex: 1 !important;
+    width: 100% !important;
+    padding: 32px 24px !important;
+  }
+}
